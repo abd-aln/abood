@@ -1,0 +1,40 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static site (Next.js export)
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: EQMq810TSUdC_DW9m48HcpWI_9OstlPvLJJPO0sc
+          accountId: 1a9782e1882fef52dbb747298f604469
+          projectName: abood
+          directory: out
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          # Optionally pin wrangler version
+          # wranglerVersion: '3'
