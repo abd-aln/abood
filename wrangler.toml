@@ -1,0 +1,10 @@
+[build]
+command = "npm install && npm run build"
+[build.upload]
+format = "directory"
+dir = "out"
+main = "./out/index.html"
+
+[site]
+bucket = "./out"
+entry-point = "workers-site"
